@@ -1,0 +1,118 @@
+import React, { useState } from 'react';
+import { Search } from 'lucide-react';
+
+// --- Data Constants ---
+const DATA_JADWAL_XI = [
+  { no: 1, nipd: "2425100204", nama: "ADRIAN EKA SURYA PRAMUDITA", sesi: 3, jam: "13.00 - 15.00 WIB" },
+  { no: 2, nipd: "2425100205", nama: "AHMAD MAULANA", sesi: 1, jam: "07.00 - 09.30 WIB" },
+  { no: 3, nipd: "2425100125", nama: "AHMAD SAEPUDIN", sesi: 1, jam: "07.00 - 09.30 WIB" },
+  { no: 4, nipd: "2425100126", nama: "AKMAL NUGROHO", sesi: 2, jam: "10.00 - 12.30 WIB" },
+  { no: 5, nipd: "2425101053", nama: "ANDRE HERDIANSYAH", sesi: 2, jam: "10.00 - 12.30 WIB" },
+  { no: 6, nipd: "2425100289", nama: "ANDRIE", sesi: 1, jam: "07.00 - 09.30 WIB" },
+  { no: 7, nipd: "2425100008", nama: "ARIEF SAPUTRA", sesi: 1, jam: "07.00 - 09.30 WIB" },
+  { no: 8, nipd: "2425100088", nama: "ARYO RIDHO SYAHPUTRA", sesi: 2, jam: "10.00 - 12.30 WIB" },
+  { no: 9, nipd: "2425100210", nama: "ATHAYA RASYA RAMADHAN", sesi: 2, jam: "10.00 - 12.30 WIB" },
+  { no: 10, nipd: "2425100049", nama: "DAFI DHAIFULLAH", sesi: 1, jam: "07.00 - 09.30 WIB" },
+  { no: 11, nipd: "2425100132", nama: "DIKA ALI KALPEN", sesi: 1, jam: "07.00 - 09.30 WIB" },
+  { no: 12, nipd: "2425100012", nama: "DIMAS MUNGGARAN", sesi: 2, jam: "10.00 - 12.30 WIB" },
+  { no: 13, nipd: "2425100297", nama: "FAHMI HIDAYAT", sesi: 3, jam: "13.00 - 15.00 WIB" },
+  { no: 14, nipd: "2425100136", nama: "FEBRYANT DIVYANO HADIW POHAN", sesi: 2, jam: "10.00 - 12.30 WIB" },
+  { no: 15, nipd: "2425100095", nama: "FIKRI MAULANA RAMADHAN", sesi: 1, jam: "07.00 - 09.30 WIB" },
+  { no: 16, nipd: "2425100299", nama: "HADYAN WIRAJAYA PRATAMA", sesi: 1, jam: "07.00 - 09.30 WIB" },
+  { no: 17, nipd: "2425100219", nama: "HAFIFIDIN ARIZKI", sesi: 2, jam: "10.00 - 12.30 WIB" },
+  { no: 18, nipd: "2425100179", nama: "IBNU SABIL", sesi: 3, jam: "13.00 - 15.00 WIB" },
+  { no: 19, nipd: "2425100300", nama: "IMAM LATHIF MUHTARAM", sesi: 2, jam: "10.00 - 12.30 WIB" },
+  { no: 20, nipd: "2425100138", nama: "IRFANA FAUZAN SYARIFUDDIN", sesi: 3, jam: "13.00 - 15.00 WIB" },
+  { no: 21, nipd: "2425100020", nama: "M. FARIZ AZZAKY", sesi: 3, jam: "13.00 - 15.00 WIB" },
+  { no: 22, nipd: "2425100061", nama: "M. HASAN", sesi: 1, jam: "07.00 - 09.30 WIB" },
+  { no: 23, nipd: "2425100303", nama: "M. RICO SIKUMBANG", sesi: 1, jam: "07.00 - 09.30 WIB" },
+  { no: 24, nipd: "2425100022", nama: "MUHAMAD BINTANG FADILA", sesi: 2, jam: "10.00 - 12.30 WIB" },
+  { no: 25, nipd: "2425100305", nama: "MUHAMMAD ABDUL FATTAH", sesi: 2, jam: "10.00 - 12.30 WIB" },
+  { no: 26, nipd: "2425100100", nama: "MUHAMMAD AZIS MUSLIM", sesi: 1, jam: "07.00 - 09.30 WIB" },
+  { no: 27, nipd: "2425100310", nama: "MUHAMMAD FACHRIZI", sesi: 1, jam: "07.00 - 09.30 WIB" },
+  { no: 28, nipd: "2425100190", nama: "MUHAMMAD HUSEN", sesi: 3, jam: "13.00 - 15.00 WIB" },
+  { no: 29, nipd: "2425100315", nama: "MUHAMMAD ZAKI", sesi: 3, jam: "13.00 - 15.00 WIB" },
+  { no: 30, nipd: "2425100317", nama: "PUTRA DIAS APRILIAN", sesi: 3, jam: "13.00 - 15.00 WIB" },
+  { no: 31, nipd: "2425100318", nama: "QOIS KHOIRUL AZZAM", sesi: 3, jam: "13.00 - 15.00 WIB" },
+  { no: 32, nipd: "2425100076", nama: "REZA AKBAR RUDIANSYAH", sesi: 3, jam: "13.00 - 15.00 WIB" },
+  { no: 33, nipd: "2425100155", nama: "RIDWAN", sesi: 2, jam: "10.00 - 12.30 WIB" },
+  { no: 34, nipd: "2425100035", nama: "RIFA RIZA", sesi: 3, jam: "13.00 - 15.00 WIB" },
+  { no: 35, nipd: "2425100161", nama: "SEPTIAN RAMADHAN", sesi: 1, jam: "07.00 - 09.30 WIB" },
+  { no: 36, nipd: "2425100324", nama: "VULVIAN ARDEN PUTRA PRANOTO", sesi: 1, jam: "07.00 - 09.30 WIB" },
+  { no: 37, nipd: "2425100162", nama: "YODY SIAMI MALIK BUDIARTO", sesi: 3, jam: "13.00 - 15.00 WIB" },
+  { no: 38, nipd: "2425100122", nama: "ZAKI RASYADAN", sesi: 2, jam: "10.00 - 12.30 WIB" }
+];
+
+const LIST_SISWA_SORTED = [...DATA_JADWAL_XI].sort((a, b) => a.nama.localeCompare(b.nama));
+
+const App = () => {
+  const [selectedStudent, setSelectedStudent] = useState(null);
+
+  const handleSelectStudent = (e) => {
+    const nipd = e.target.value;
+    const found = DATA_JADWAL_XI.find(s => s.nipd === nipd);
+    setSelectedStudent(found || null);
+  };
+
+  const activeStudentData = selectedStudent || {
+    nama: "NAMA PESERTA UJIAN",
+    nipd: "XXXXXXXXXX",
+    sesi: "-",
+    jam: "--.-- WIB"
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-900 text-white p-8">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="bg-black p-8 rounded-3xl shadow-xl border border-slate-800">
+          <h2 className="text-2xl font-bold mb-6 text-white flex items-center gap-2">
+            <Search className="text-yellow-400" /> Pilih Peserta Ujian
+          </h2>
+          <select 
+            onChange={handleSelectStudent}
+            className="w-full p-4 rounded-xl bg-slate-900 border border-slate-700 text-white font-bold focus:border-yellow-400 outline-none transition"
+          >
+            <option value="">-- Cari dari 38 Siswa --</option>
+            {LIST_SISWA_SORTED.map(s => <option key={s.nipd} value={s.nipd}>{s.nama}</option>)}
+          </select>
+          
+          {selectedStudent && (
+            <div className="mt-6 p-4 bg-slate-800 text-white rounded-xl font-bold border-l-4 border-yellow-400">
+              Data Ditemukan: {selectedStudent.nama}
+            </div>
+          )}
+        </div>
+
+        <div className="bg-gradient-to-b from-blue-900 to-black p-6 rounded-3xl border-4 border-yellow-400 shadow-2xl relative overflow-hidden">
+          <div className="text-center border-b border-white/20 pb-4 mb-6">
+            <h3 className="text-white font-bold text-xl">SMK KARYA BAHANA MANDIRI</h3>
+            <p className="text-yellow-400 text-xs font-bold">AUTOMOTIVE TRAINING CENTER (ATC-TKR)</p>
+          </div>
+          
+          <div className="space-y-4 text-white">
+            <div className="flex justify-between">
+              <span className="text-gray-400 text-sm">NAMA</span>
+              <span className="font-bold">{activeStudentData.nama}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-400 text-sm">NIPD</span>
+              <span className="font-mono font-bold">{activeStudentData.nipd}</span>
+            </div>
+            <div className="bg-white/10 p-6 rounded-2xl text-center mt-6">
+              <p className="text-yellow-400 text-xs uppercase font-bold">Sesi Praktik</p>
+              <p className="text-6xl font-black my-2">{activeStudentData.sesi}</p>
+              <p className="text-sm font-bold">{activeStudentData.jam}</p>
+            </div>
+          </div>
+          
+          <div className="mt-8 pt-4 border-t border-white/10 text-right">
+            <p className="text-xs text-gray-400">Kepala Program TKR</p>
+            <p className="font-bold underline">H. Irwan Rahmat, S.T, Gr</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default App;
